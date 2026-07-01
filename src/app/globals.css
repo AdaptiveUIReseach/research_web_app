@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-brand-primary: #38bdf8; /* sky-400 */
+  --color-brand-secondary: #4ade80; /* mint-400 */
+  --color-brand-accent: #fb923c; /* peach-400 */
+  --color-brand-background: #020617; /* slate-950 */
+  --color-brand-surface: rgba(15, 23, 42, 0.6); /* slate-900/60 */
+}
+
+:root {
+  --background: #020617;
+  --foreground: #f8fafc;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Refined Glass utility */
+@layer utilities {
+  .glass {
+    background: var(--color-brand-surface);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+
+  .text-reassuring {
+    @apply text-slate-400 leading-relaxed tracking-wide;
+  }
+}
+
+/* Micro-interaction: Soft Bounce */
+@keyframes soft-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.animate-soft-bounce {
+  animation: soft-bounce 0.6s ease-in-out;
+}
+
+/* Hand mode layout offsets */
+.hand-mode-left main {
+  padding-right: 8% !important;
+  transition: padding 0.3s ease;
+}
+.hand-mode-right main {
+  padding-left: 8% !important;
+  transition: padding 0.3s ease;
+}
