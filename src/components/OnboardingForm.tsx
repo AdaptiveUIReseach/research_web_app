@@ -452,7 +452,7 @@ export default function OnboardingForm({
             {/* Row 4: Department Combobox */}
             <motion.div variants={itemVariants}>
               <Combobox
-                label="Department"
+                label="Faculty"
                 options={DEPARTMENTS}
                 value={formData.department}
                 onChange={(val) =>
