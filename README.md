@@ -1,6 +1,6 @@
 # Adaptive UI Research Portal
 
-This project provides a full-stack telemetry and adaptation research tool.
+This project provides a full-stack telemetry and adaptation research tool
 
 ## Prerequisites
 - Node.js LTS
