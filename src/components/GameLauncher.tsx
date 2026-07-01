@@ -84,35 +84,45 @@ export default function GameLauncher({
     switch (id) {
       case 'precision_target_matrix': return {
         icon: <Zap size={24} />,
-        goal: "Test your touch precision.",
-        desc: isHard ? "Smaller targets, faster pace. Focus on hitting the center." : "Tap the sky-blue targets as they appear on screen.",
+        goal: "Tap targets as fast & accurately as you can.",
+        steps: isHard
+          ? ["Watch for small blue circles appearing anywhere on screen", "Tap the center of each circle as quickly as possible", "Avoid tapping empty areas — misses are tracked"]
+          : ["Blue circles will pop up on screen one at a time", "Tap each circle before the next one appears", "Aim for the center to maximize your accuracy score"],
         metric: "Accuracy & Reaction Time"
       };
       case 'reachability_zone_mapper': return {
         icon: <Zap size={24} />,
-        goal: "Map your comfortable reach.",
-        desc: isHard ? "Targets will appear in the extreme corners. Use one hand if possible." : "Tap the highlighted zones using only your thumb.",
+        goal: "Tap the highlighted screen zone using one hand.",
+        steps: isHard
+          ? ["The screen is divided into 6 zones", "A small blue dot will appear in one of them", "Reach and tap that zone using only your thumb — do not reposition your grip"]
+          : ["The screen is divided into 6 zones", "One zone will light up with a large TAP indicator", "Using just your thumb, tap anywhere inside that zone"],
         metric: "Reachability & Zone Mapping"
       };
       case 'input_rhythm_racer': return {
         icon: <Zap size={24} />,
-        goal: "Measure typing flow and errors.",
-        desc: isHard ? "Complete the complex sentence with punctuation and numbers." : "Type the simple phrase exactly as shown.",
+        goal: "Type the phrase shown exactly as written.",
+        steps: isHard
+          ? ["Read the phrase displayed — it includes punctuation and numbers", "Tap the text field and type it out as accurately as you can", "The stage ends when you finish or time runs out"]
+          : ["A short phrase will appear on screen", "Tap the input box below and type it exactly", "Green letters mean correct, red means a mistake"],
         metric: "WPM & Error Rate"
       };
       case 'hierarchical_system_navigator': return {
         icon: <Zap size={24} />,
-        goal: "Assess navigation efficiency.",
-        desc: isHard ? "Navigate through a deep system tree to find the target authorization." : "Find the 'Audio Frequency' folder in the directory.",
+        goal: isHard ? "Find 'Target Authorization' deep in the menu tree." : "Find 'Audio Frequency' inside the directory.",
+        steps: isHard
+          ? ["You start at the Mainframe root menu", "Tap folders to drill into submenus — look for 'Secure Subsystem'", "Use the back arrow if you go the wrong way"]
+          : ["You start at the Systems root menu", "Tap 'Configuration' then look for 'Audio Frequency'", "Tap it to complete the stage"],
         metric: "Pathing & Confusion Index"
       };
       case 'density_scan_optimizer': return {
         icon: <Zap size={24} />,
-        goal: "Analyze scroll control.",
-        desc: isHard ? "Scan through a dense list of 200 items to find 5 hidden targets." : "Scroll through the list and tap the red target items.",
+        goal: isHard ? "Find and tap all 5 red targets in the long list." : "Find and tap all 3 red targets in the list.",
+        steps: isHard
+          ? ["Scroll through a list of 200 entries", "Items labeled 'CRITICAL_TARGET_DETECTION_FOUND' are your targets", "Tap each red target — find all 5 to finish early"]
+          : ["Scroll down through the list of entries", "Spotted a red glowing item? That's a target — tap it!", "Find all 3 targets to complete the stage"],
         metric: "Velocity & Search Stability"
       };
-      default: return { icon: <Zap size={24} />, goal: "Begin Protocol", desc: "Interact with the targets provided.", metric: "General Interaction" };
+      default: return { icon: <Zap size={24} />, goal: "Begin Protocol", steps: ["Interact with the targets provided."], metric: "General Interaction" };
     }
   };
 
@@ -163,24 +173,36 @@ export default function GameLauncher({
             transition={{ duration: 0.2 }}
             className="absolute inset-0 z-[60] flex items-center justify-center p-4 sm:p-6 bg-slate-950/60 backdrop-blur-sm"
           >
-            <div className="w-full max-w-sm glass p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] text-center border-white/10 shadow-2xl relative overflow-hidden">
+            <div className="w-full max-w-sm glass p-6 sm:p-8 rounded-[1.5rem] sm:rounded-[2rem] border-white/10 shadow-2xl relative overflow-hidden">
               <div className="absolute -top-10 -right-10 opacity-[0.03] text-sky-400">
                 {briefing.icon}
               </div>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sky-400/10 rounded-xl mx-auto mb-3 sm:mb-4 flex items-center justify-center text-sky-400">
-                 {briefing.icon}
+              <div className="flex flex-col items-center text-center mb-4 sm:mb-5">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-sky-400/10 rounded-xl mx-auto mb-3 sm:mb-4 flex items-center justify-center text-sky-400">
+                   {briefing.icon}
+                </div>
+                
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[8px] sm:text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-2 sm:mb-3">
+                  {currentGame.stage} Mode
+                </div>
+                
+                <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">{briefing.goal}</h3>
+              </div>
+
+              {/* How to Play Steps */}
+              <div className="mb-4 sm:mb-5 bg-slate-900/50 rounded-xl border border-white/5 p-3 sm:p-4">
+                <span className="text-[7px] sm:text-[8px] font-black text-sky-500 uppercase tracking-[0.2em] block mb-2.5">How to Play</span>
+                <ol className="space-y-2">
+                  {briefing.steps.map((step, i) => (
+                    <li key={i} className="flex items-start gap-2.5 text-left">
+                      <span className="shrink-0 w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full bg-sky-400/15 border border-sky-400/30 text-sky-400 text-[9px] sm:text-[10px] font-bold flex items-center justify-center mt-px">{i + 1}</span>
+                      <span className="text-slate-300 text-[11px] sm:text-xs leading-snug">{step}</span>
+                    </li>
+                  ))}
+                </ol>
               </div>
               
-              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[8px] sm:text-[9px] font-bold text-slate-500 uppercase tracking-widest mb-2 sm:mb-3">
-                {currentGame.stage} Mode
-              </div>
-              
-              <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight mb-1.5 sm:mb-2">{briefing.goal}</h3>
-              <p className="text-slate-400 text-xs sm:text-sm leading-relaxed mb-5 sm:mb-6 px-1 sm:px-2">
-                {briefing.desc}
-              </p>
-              
-              <div className="mb-6 sm:mb-8 p-2.5 sm:p-3 bg-slate-900/50 rounded-xl sm:rounded-2xl border border-white/5 flex flex-col items-center">
+              <div className="mb-4 sm:mb-5 p-2 sm:p-2.5 bg-slate-900/50 rounded-xl border border-white/5 flex flex-col items-center">
                 <span className="text-[7px] sm:text-[8px] font-black text-sky-500 uppercase tracking-[0.2em] mb-0.5 sm:mb-1">Key Metric</span>
                 <span className="text-[11px] sm:text-xs text-slate-300 font-medium">{briefing.metric}</span>
               </div>
